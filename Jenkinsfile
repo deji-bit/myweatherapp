@@ -26,8 +26,8 @@ pipeline {
          steps {
             echo 'Copying SNAPSHOT to remote app node'
             sh '''
-            sudo ssh -i ~/.ssh/first_keys ec2-user@10.0.0.170 'rm -r /tmp/weather-app-0.0.1-SNAPSHOT.jar' || 'true'
-            sudo scp -v -o StrictHostKeyChecking=no -i ~/.ssh/first_keys /tmp/icon/myweatherapp/target/weather-app-0.0.1-SNAPSHOT.jar ec2-user@10.0.0.170:/tmp/
+            sudo ssh -o StrictHostKeychecking=no -i ~/.ssh/first_keys ec2-user@10.0.0.170 'rm -r /tmp/weather-app-0.0.1-SNAPSHOT.jar' || 'true'
+            sudo scp -v -i ~/.ssh/first_keys /tmp/icon/myweatherapp/target/weather-app-0.0.1-SNAPSHOT.jar ec2-user@10.0.0.170:/tmp/
             '''
       	 }
        }
