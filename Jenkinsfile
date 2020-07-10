@@ -36,12 +36,13 @@ pipeline {
          steps {
             echo 'Configuring Proxy Server for app deployment'
             sh '''
-            cd
-	    sudo scp -v -o StrictHostKeychecking=no -i /home/ec2-user/.ssh/first_keys /tmp/icon/myweatherapp/nginx.conf ec2-user@10.0.0.250:/tmp/
+            sudo scp -v -o StrictHostKeychecking=no -i /home/ec2-user/.ssh/first_keys /tmp/icon/myweatherapp/nginx.conf ec2-user@10.0.0.250:/tmp/
 	    cd
 	    sudo ssh -i /home/ec2-user/.ssh/first_keys ec2-user@10.0.0.250 '
+	    sudo systemctl stop nginx
             cd /tmp/
             sudo cp nginx.conf /etc/nginx/
+	    sudo systemctl start nginx
 	    sudo systemctl daemon-reload '
             '''
       	 }
