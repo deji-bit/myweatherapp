@@ -26,8 +26,20 @@ pipeline {
          steps {
             echo 'Copying SNAPSHOT to remote app node'
             sh '''
-            sudo ssh -o StrictHostKeychecking=no -i ~/.ssh/first_keys ec2-user@10.0.0.170 'rm -r /tmp/weather-app-0.0.1-SNAPSHOT.jar' || 'true'
-            sudo scp -v -i ~/.ssh/first_keys /tmp/icon/myweatherapp/target/weather-app-0.0.1-SNAPSHOT.jar ec2-user@10.0.0.170:/tmp/
+            sudo ssh -o StrictHostKeychecking=no -i ~/.ssh/first_keys ec2-user@10.0.0.144 'rm -r /tmp/weather-app-0.0.1-SNAPSHOT.jar' || 'true'
+            sudo scp -v -i ~/.ssh/first_keys /tmp/icon/myweatherapp/target/weather-app-0.0.1-SNAPSHOT.jar ec2-user@10.0.0.144:/tmp/
+            '''
+      	 }
+       }
+      stage('Set Proxy' ) {
+         steps {
+            echo 'Configuring Proxy Server for app deployment'
+            sh '''
+            sudo scp -v -o StrictHostKeychecking=no -i ~/.ssh/first_keys /tmp/icon/myweatherapp/nginx.conf ec2-user@10.0.0.250:/tmp/
+	    sudo ssh -i ~/.ssh/first_keys ec2-user@10.0.0.250 '
+            cd /tmp/
+            sudo cp nginx.conf /etc/nginx/
+	    sudo systemctl daemon-reload '
             '''
       	 }
        }
@@ -35,7 +47,7 @@ pipeline {
          steps {
             echo 'Deploying code to non-active node'
 	    sh '''
-	    sudo ssh -i ~/.ssh/first_keys ec2-user@10.0.0.170 '
+	    sudo ssh -i ~/.ssh/first_keys ec2-user@10.0.0.144 '
             cd /tmp/
             java -jar weather-app-0.0.1-SNAPSHOT.jar &
             exit '
