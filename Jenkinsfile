@@ -7,7 +7,8 @@ pipeline {
             echo 'Cloning code from remote repository'
 	    sh '''
             cd /tmp/
-	    mkdir icon || 'true'
+	    rm -rf icon || 'true'
+	    mkdir icon
             cd icon
             git clone https://github.com/deji-bit/myweatherapp.git
             '''
