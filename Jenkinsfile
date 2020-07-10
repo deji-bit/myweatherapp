@@ -52,6 +52,7 @@ pipeline {
             echo 'Deploying code to non-active node'
 	    sh '''
 	    sudo ssh -i /home/ec2-user/.ssh/first_keys ec2-user@10.0.0.144 '
+	    kill pid 30240
             cd /tmp/
             java -jar weather-app-0.0.1-SNAPSHOT.jar &
             exit '
